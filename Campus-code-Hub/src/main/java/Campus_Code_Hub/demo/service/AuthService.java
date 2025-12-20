@@ -1,6 +1,7 @@
 package Campus_Code_Hub.demo.service;
 
 import Campus_Code_Hub.demo.dto.RegisterRequest;
+import Campus_Code_Hub.demo.model.Role;
 import Campus_Code_Hub.demo.model.Student;
 import Campus_Code_Hub.demo.repository.StudentRepository;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +29,9 @@ public class AuthService {
             throw new RuntimeException("Email already registered");
         }
 
-
+        Role role = (request.getRole() == null || request.getRole().isEmpty())
+                ? Role.STUDENT
+                : Role.valueOf(request.getRole());
 
 
         Student student = Student.builder()
@@ -38,7 +41,7 @@ public class AuthService {
                 .department(request.getDepartment())
                 .year(request.getYear())
                 .registerNumber(request.getRegisterNumber())
-                .role("STUDENT")
+                .role(role)
                 .build();
 
         studentRepository.save(student);

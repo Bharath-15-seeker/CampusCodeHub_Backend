@@ -37,8 +37,10 @@ public class Student {
     private String registerNumber;
 
     // Role (ADMIN / STUDENT)
+
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private String role;
+    private Role role;
 
 
     /* ---------------------------
@@ -60,6 +62,7 @@ public class Student {
     /* ---------------------------
        POINTS FOR LEADERBOARD
     --------------------------- */
+
     @Column(nullable = false)
     private int points = 0;
 

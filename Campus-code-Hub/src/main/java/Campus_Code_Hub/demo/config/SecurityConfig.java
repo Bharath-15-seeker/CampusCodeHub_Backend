@@ -16,6 +16,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import static org.springframework.security.authorization.AuthorityReactiveAuthorizationManager.hasAuthority;
+
 /**
  * Security configuration (Spring Security 6+ compatible).
  */
@@ -24,10 +26,12 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableMethodSecurity
 public class SecurityConfig {
 
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final UserDetailsService userDetailsService;
     private final JwtUtil jwtUtil;
 
-    public SecurityConfig(UserDetailsService userDetailsService, JwtUtil jwtUtil) {
+    public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter, UserDetailsService userDetailsService, JwtUtil jwtUtil) {
+        this.jwtAuthenticationFilter = jwtAuthenticationFilter;
         this.userDetailsService = userDetailsService;
         this.jwtUtil = jwtUtil;
     }
@@ -50,33 +54,21 @@ public class SecurityConfig {
         return authConfig.getAuthenticationManager();
     }
 
-    @Bean
-    public JwtAuthenticationFilter jwtAuthenticationFilter() {
-        // make sure JwtAuthenticationFilter has a constructor (JwtUtil, UserDetailsService)
-        return new JwtAuthenticationFilter(jwtUtil, userDetailsService);
-    }
+
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+
         http.csrf(csrf -> csrf.disable());
 
-        // <<--- CORRECT usage: authorizeHttpRequests requires a Customizer (lambda) ---->>
-        http.authorizeHttpRequests(auth -> {
-            // permit unauthenticated access to these endpoints
-            auth.requestMatchers("/auth/**").permitAll();
-            auth.requestMatchers("/v3/api-docs/**").permitAll();
-            auth.requestMatchers("/swagger-ui/**").permitAll();
-            auth.requestMatchers("/swagger-ui.html").permitAll();
-            auth.requestMatchers("/h2-console/**").permitAll(); // dev only
-            // any other request must be authenticated
-            auth.anyRequest().authenticated();
-        });
+        http.authorizeHttpRequests(auth -> auth
+                .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                .requestMatchers("/auth/**").permitAll()
+                .anyRequest().authenticated()
+        );
 
         http.authenticationProvider(authenticationProvider());
-        http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
-
-        // allow H2 frames during dev (remove in production)
-        http.headers(headers -> headers.frameOptions(frame -> frame.sameOrigin()));
+        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

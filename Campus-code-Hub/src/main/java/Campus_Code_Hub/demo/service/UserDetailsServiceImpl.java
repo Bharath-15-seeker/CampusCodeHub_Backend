@@ -24,7 +24,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         return User.builder()
                 .username(student.getEmail())
                 .password(student.getPassword()) // hashed
-                .authorities(student.getRole()) // adapt to collection if needed
+                .authorities("ROLE_" + student.getRole().name())
                 .accountExpired(false)
                 .accountLocked(false)
                 .credentialsExpired(false)
