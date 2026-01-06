@@ -66,6 +66,7 @@ public class SecurityConfig {
                 .requestMatchers("/api/progress/**").permitAll()
                 .requestMatchers("/api/admin/**").hasAuthority("ADMIN")
                 .requestMatchers("/api/students/**").permitAll()
+                .requestMatchers("/api/sheets/**").permitAll()
                 .anyRequest().authenticated()
         );
 
