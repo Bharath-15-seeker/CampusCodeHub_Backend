@@ -1,5 +1,6 @@
 package Campus_Code_Hub.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -21,6 +22,7 @@ public class SubTopic {
     private Topic topic;
 
     @OneToMany(mappedBy = "subTopic")
+    @JsonIgnore
     private List<Question> questions;
 }
 

@@ -1,5 +1,6 @@
 package Campus_Code_Hub.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -23,6 +24,7 @@ public class Topic {
     private Sheet sheet;
 
     @OneToMany(mappedBy = "topic", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<SubTopic> subTopics;
 }
 
