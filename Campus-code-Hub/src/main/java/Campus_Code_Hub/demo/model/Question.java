@@ -1,8 +1,10 @@
 package Campus_Code_Hub.demo.model;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 @Entity
+@Data
 public class Question {
 
     @Id
@@ -17,6 +19,9 @@ public class Question {
 
     @Column(nullable = true)
     private String problemLink;
+
+    @Column(nullable = true)
+    private String VideoLink;
 
     @Column(nullable = true)
     private String optionA;

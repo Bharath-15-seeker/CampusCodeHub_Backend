@@ -3,8 +3,11 @@ package Campus_Code_Hub.demo.service;
 import Campus_Code_Hub.demo.model.Student; // or your User entity
 import Campus_Code_Hub.demo.repository.StudentRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.*;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
@@ -23,12 +26,15 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         // Map your Student entity to Spring Security UserDetails:
         return User.builder()
                 .username(student.getEmail())
-                .password(student.getPassword()) // hashed
-                .authorities("ROLE_" + student.getRole().name())
+                .password(student.getPassword())
+                .authorities(
+                        List.of(new SimpleGrantedAuthority(student.getRole().name()))
+                )
                 .accountExpired(false)
                 .accountLocked(false)
                 .credentialsExpired(false)
                 .disabled(false)
                 .build();
+
     }
 }

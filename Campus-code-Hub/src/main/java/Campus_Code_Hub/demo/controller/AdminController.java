@@ -21,7 +21,7 @@ public class AdminController {
     private final StudentRepository studentRepository;
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @Transactional
     public String deleteStudentById(@PathVariable Long id) {
 

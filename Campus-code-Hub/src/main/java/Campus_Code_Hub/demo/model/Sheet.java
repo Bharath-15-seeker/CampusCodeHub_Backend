@@ -2,6 +2,8 @@ package Campus_Code_Hub.demo.model;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "sheets")
 public class Sheet {

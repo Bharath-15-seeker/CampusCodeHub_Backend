@@ -62,9 +62,8 @@ public class SecurityConfig {
         http.csrf(csrf -> csrf.disable());
 
         http.authorizeHttpRequests(auth -> auth
-
-                .requestMatchers("/api/admin/**").hasRole("ADMIN")
                 .requestMatchers("/auth/**").permitAll()
+                .requestMatchers("/api/admin/**").hasAuthority("ADMIN")
                 .requestMatchers("/api/students/**").permitAll()
                 .anyRequest().authenticated()
         );
@@ -74,4 +73,5 @@ public class SecurityConfig {
 
         return http.build();
     }
+
 }
