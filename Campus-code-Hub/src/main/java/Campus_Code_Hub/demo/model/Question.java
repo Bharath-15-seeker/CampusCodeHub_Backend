@@ -1,5 +1,6 @@
 package Campus_Code_Hub.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -41,5 +42,6 @@ public class Question {
     private String explanation;     
 
     @ManyToOne
+    @JsonIgnore
     private SubTopic subTopic;
 }

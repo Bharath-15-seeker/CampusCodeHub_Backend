@@ -68,6 +68,7 @@ public class SecurityConfig {
                 .requestMatchers("/api/students/**").permitAll()
                 .requestMatchers("/api/sheets/**").permitAll()
                 .requestMatchers("/api/events/**").permitAll()
+                .requestMatchers("/api/career-tracks/**").permitAll()
                 .anyRequest().authenticated()
         );
 

@@ -20,23 +20,15 @@ public class Student {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Email is your login username
+    /* ---------------------------
+       AUTH DETAILS
+    --------------------------- */
+
     @Column(nullable = false, unique = true)
     private String email;
 
-    // BCrypt hashed password
     @Column(nullable = false)
     private String password;
-
-    // Basic student profile fields
-    @Column(nullable = false)
-    private String name;
-
-    private String department;
-    private int year;  // 1,2,3,4
-    private String registerNumber;
-
-    // Role (ADMIN / STUDENT)
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -44,46 +36,45 @@ public class Student {
 
 
     /* ---------------------------
-       STREAK SYSTEM
+       BASIC PROFILE
     --------------------------- */
 
-    // Current consecutive streak days
     @Column(nullable = false)
-    private int currentStreak = 0;
+    private String name;
 
-    // Highest streak ever
-    @Column(nullable = false)
-    private int highestStreak = 0;
-
-    // Last date they logged in or performed streak action
-    private LocalDateTime lastStreakUpdate;
+    private String department;
+    private int year;
+    private String registerNumber;
 
 
     /* ---------------------------
-       POINTS FOR LEADERBOARD
+       CODING PLATFORM PROFILE
     --------------------------- */
 
-    @Column(nullable = false)
-    private int points = 0;
+
+    // LEETCODE / GEEKSFORGEEKS
+
+    private String codingProfileUrl;
 
 
     /* ---------------------------
-       EVENT ENROLLMENT MAPPING
+       POINTS SYSTEM
     --------------------------- */
-    //@OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
-    //private List<EventEnrollment> enrollments;
+
+    @Column(name = "coding_points", nullable = false)
+    private int codingPoints = 0;
+
+    @Column(name = "aptitude_points", nullable = false)
+    private int aptitudePoints = 0;
 
 
     /* ---------------------------
        AUDIT FIELDS
     --------------------------- */
+
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-
-    /* ---------------------------
-       JPA LIFECYCLE HOOKS
-    --------------------------- */
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();
@@ -95,4 +86,5 @@ public class Student {
         updatedAt = LocalDateTime.now();
     }
 }
+
 

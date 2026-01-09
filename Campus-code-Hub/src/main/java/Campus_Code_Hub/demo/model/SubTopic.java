@@ -19,10 +19,12 @@ public class SubTopic {
     private String youtubeLink;     // Learn concept video
 
     @ManyToOne
+    @JsonIgnore
     private Topic topic;
 
-    @OneToMany(mappedBy = "subTopic")
+    @OneToMany(mappedBy = "subTopic", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private List<Question> questions;
+
 }
 

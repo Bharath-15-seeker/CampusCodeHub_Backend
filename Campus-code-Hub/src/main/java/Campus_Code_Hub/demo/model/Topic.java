@@ -21,6 +21,7 @@ public class Topic {
 
     @ManyToOne
     @JoinColumn(name = "sheet_id")
+    @JsonIgnore
     private Sheet sheet;
 
     @OneToMany(mappedBy = "topic", cascade = CascadeType.ALL)

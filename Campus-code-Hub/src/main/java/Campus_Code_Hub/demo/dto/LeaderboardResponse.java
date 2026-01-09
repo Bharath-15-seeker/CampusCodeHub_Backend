@@ -12,6 +12,6 @@ public class LeaderboardResponse {
     private Long studentId;
     private String studentName;
     private String studentEmail;
-    private Long totalPoints;
+    private int totalPoints;
 }
 

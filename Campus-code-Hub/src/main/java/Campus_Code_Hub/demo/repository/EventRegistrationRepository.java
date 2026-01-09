@@ -22,22 +22,33 @@ public interface EventRegistrationRepository
 
     void deleteByEvent(Event event);
 
+
+
     @Query("""
-        SELECT new Campus_Code_Hub.demo.dto.LeaderboardResponse(
-            er.student.id,
-            er.student.name,
-            er.student.email,
-            SUM(er.points)
-        )
-        FROM EventRegistration er
-        WHERE er.event.type = :type
-          AND er.event.status = Campus_Code_Hub.demo.model.EventStatus.COMPLETED
-        GROUP BY er.student.id, er.student.name, er.student.email
-        ORDER BY SUM(er.points) DESC
-    """)
-    List<LeaderboardResponse> getLeaderboardByType(
-            @Param("type") EventType type
-    );
+    SELECT new Campus_Code_Hub.demo.dto.LeaderboardResponse(
+        s.id,
+        s.name,
+        s.email,
+        s.codingPoints
+    )
+    FROM Student s
+    ORDER BY s.codingPoints DESC
+""")
+    List<LeaderboardResponse> getCodingLeaderboard();
+
+    @Query("""
+    SELECT new Campus_Code_Hub.demo.dto.LeaderboardResponse(
+        s.id,
+        s.name,
+        s.email,
+        s.aptitudePoints
+    )
+    FROM Student s
+    ORDER BY s.aptitudePoints DESC
+""")
+    List<LeaderboardResponse> getAptitudeLeaderboard();
+
+
     Optional<EventRegistration> findByEventAndStudent(Event event, Student student);
 }
 

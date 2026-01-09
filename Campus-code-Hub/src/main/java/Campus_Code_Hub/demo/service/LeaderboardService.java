@@ -17,11 +17,11 @@ public class LeaderboardService {
 
     @Transactional(readOnly = true)
     public List<LeaderboardResponse> getCodingLeaderboard() {
-        return registrationRepository.getLeaderboardByType(EventType.CODING);
+        return registrationRepository.getCodingLeaderboard();
     }
 
     @Transactional(readOnly = true)
     public List<LeaderboardResponse> getAptitudeLeaderboard() {
-        return registrationRepository.getLeaderboardByType(EventType.APTITUDE);
+        return registrationRepository.getAptitudeLeaderboard();
     }
 }

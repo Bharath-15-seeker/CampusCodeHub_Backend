@@ -1,20 +1,19 @@
 package Campus_Code_Hub.demo.service;
 
 import Campus_Code_Hub.demo.dto.*;
-import Campus_Code_Hub.demo.model.Event;
-import Campus_Code_Hub.demo.model.EventRegistration;
-import Campus_Code_Hub.demo.model.EventStatus;
-import Campus_Code_Hub.demo.model.Student;
+import Campus_Code_Hub.demo.model.*;
 import Campus_Code_Hub.demo.repository.EventRegistrationRepository;
 import Campus_Code_Hub.demo.repository.EventRepository;
 import Campus_Code_Hub.demo.repository.StudentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import lombok.extern.slf4j.Slf4j;
 
 import java.time.temporal.WeekFields;
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class EventService {
@@ -154,27 +153,34 @@ public class EventService {
     @Transactional
     public void assignPoints(Long eventId, AssignPointsRequest request) {
 
+        log.info("ASSIGN POINTS STARTED");
+
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(() -> new RuntimeException("Event not found"));
 
-        // Recommended rule
-        if (event.getStatus() != EventStatus.COMPLETED) {
-            throw new IllegalStateException(
-                    "Points can be assigned only after event completion"
-            );
-        }
+        log.info("Event type = {}", event.getType());
 
         Student student = studentRepository.findById(request.getStudentId())
                 .orElseThrow(() -> new RuntimeException("Student not found"));
 
-        EventRegistration registration =
-                eventRegistrationRepository.findByEventAndStudent(event, student)
-                        .orElseThrow(() ->
-                                new RuntimeException("Student not registered for this event"));
+        log.info("Before: coding={}, aptitude={}",
+                student.getCodingPoints(),
+                student.getAptitudePoints());
 
-        registration.setPoints(request.getPoints());
-        eventRegistrationRepository.save(registration);
+        if (event.getType() == EventType.CODING) {
+            student.setCodingPoints(student.getCodingPoints() + request.getPoints());
+        } else {
+            student.setAptitudePoints(student.getAptitudePoints() + request.getPoints());
+        }
+
+        studentRepository.save(student);
+
+        log.info("After: coding={}, aptitude={}",
+                student.getCodingPoints(),
+                student.getAptitudePoints());
     }
+
+
 }
 
 
