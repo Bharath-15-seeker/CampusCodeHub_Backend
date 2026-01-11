@@ -32,7 +32,7 @@ public class Student {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Role role;
+    private Role role = Role.STUDENT; // Provide a default value
 
 
     /* ---------------------------

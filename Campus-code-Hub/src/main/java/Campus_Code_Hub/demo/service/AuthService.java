@@ -4,9 +4,11 @@ import Campus_Code_Hub.demo.dto.RegisterRequest;
 import Campus_Code_Hub.demo.model.Role;
 import Campus_Code_Hub.demo.model.Student;
 import Campus_Code_Hub.demo.repository.StudentRepository;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -17,6 +19,7 @@ public class AuthService {
 
     private static final String COLLEGE_DOMAIN = "@krcollege.net";
 
+    @Transactional
     public void register(RegisterRequest request) {
 
         if (request.getEmail() == null ||
