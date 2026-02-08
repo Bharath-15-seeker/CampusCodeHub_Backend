@@ -4,6 +4,7 @@ import Campus_Code_Hub.demo.dto.SheetResponse;
 import Campus_Code_Hub.demo.model.SheetType;
 import Campus_Code_Hub.demo.service.SheetService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,12 +17,14 @@ public class SheetController {
     private final SheetService sheetService;
 
     @GetMapping("/coding")
-    public SheetResponse getCodingSheet() {
-        return sheetService.getSheet(SheetType.CODING);
+    public SheetResponse getCodingSheet(Authentication authentication) {
+        String email=authentication.getName();
+        return sheetService.getSheet(SheetType.CODING,email);
     }
 
     @GetMapping("/aptitude")
-    public SheetResponse getAptitudeSheet() {
-        return sheetService.getSheet(SheetType.APTITUDE);
+    public SheetResponse getAptitudeSheet(Authentication authentication) {
+        String email=authentication.getName();
+        return sheetService.getSheet(SheetType.APTITUDE,email);
     }
 }

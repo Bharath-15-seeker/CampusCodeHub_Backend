@@ -14,6 +14,13 @@ public interface UserQuestionProgressRepository
 
     Optional<UserQuestionProgress> findByUserAndQuestion(Student user, Question question);
 
+    Optional<UserQuestionProgress>
+    findByUserIdAndQuestionId
+            (Long userId, Long questionId);
+
+    long countByUserIdAndSolvedTrueAndQuestionIdIn(
+            Long userId, List<Long> questionIds
+    );
     List<UserQuestionProgress> findByUser(Student user);
 }
 

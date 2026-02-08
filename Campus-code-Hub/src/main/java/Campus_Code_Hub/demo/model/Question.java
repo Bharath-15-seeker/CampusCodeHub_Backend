@@ -25,6 +25,9 @@ public class Question {
     @Column(nullable = true)
     private String VideoLink;
 
+    @Enumerated(EnumType.STRING)
+    private SheetType sheetType;
+
     @Column(nullable = true)
     private String optionA;
     @Column(nullable = true)

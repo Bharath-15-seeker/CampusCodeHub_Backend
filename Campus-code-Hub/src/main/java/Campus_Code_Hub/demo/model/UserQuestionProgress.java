@@ -1,5 +1,6 @@
 package Campus_Code_Hub.demo.model;
 
+import aj.org.objectweb.asm.commons.Remapper;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -16,6 +17,7 @@ public class UserQuestionProgress {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+
     @ManyToOne
     private Student user;
 
@@ -23,5 +25,7 @@ public class UserQuestionProgress {
     private Question question;
 
     private boolean solved;
+
+
 }
 
