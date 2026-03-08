@@ -2,6 +2,7 @@ package Campus_Code_Hub.demo.controller;
 
 import Campus_Code_Hub.demo.service.EventRegistrationService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,12 +18,19 @@ public class EventRegistrationController {
     private final EventRegistrationService registrationService;
 
     @PostMapping("/{eventId}/register")
-    public ResponseEntity<String> registerForEvent(
+    public ResponseEntity<?> registerForEvent(
             @PathVariable Long eventId,
-            Authentication authentication
-    ) {
+            Authentication authentication) {
+
+        if(authentication == null){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body("User not authenticated");
+        }
+
         String email = authentication.getName();
-        registrationService.registerForEvent(eventId, email);
+
+       registrationService.registerForEvent(eventId, email);
+
         return ResponseEntity.ok("Registered successfully");
     }
 }

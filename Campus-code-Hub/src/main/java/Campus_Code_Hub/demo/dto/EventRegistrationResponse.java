@@ -10,6 +10,6 @@ public class EventRegistrationResponse {
     private Long studentId;
     private String studentName;
     private String studentEmail;
-
+    private String department;
     private Integer points;
 }

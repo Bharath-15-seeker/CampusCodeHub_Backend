@@ -140,6 +140,7 @@ public class EventService {
                 .map(reg -> {
                     EventRegistrationResponse dto = new EventRegistrationResponse();
                     dto.setRegistrationId(reg.getId());
+                    dto.setDepartment(reg.getStudent().getDepartment());
                     dto.setStudentId(reg.getStudent().getId());
                     dto.setStudentName(reg.getStudent().getName());
                     dto.setStudentEmail(reg.getStudent().getEmail());
