@@ -19,6 +19,7 @@ public class CareerResource {
     @Column(columnDefinition = "TEXT")
     private String description;
 
+    @Column(name = "youtube_link")
     private String youtubeLink;
 
     private int orderIndex; // roadmap order

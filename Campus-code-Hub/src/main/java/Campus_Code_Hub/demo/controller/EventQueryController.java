@@ -6,6 +6,7 @@ import Campus_Code_Hub.demo.model.EventType;
 import Campus_Code_Hub.demo.service.EventQueryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -23,10 +24,12 @@ public class EventQueryController {
     @GetMapping
     public ResponseEntity<List<EventResponse>> getAllEvents(
             @RequestParam(required = false) EventType type,
-            @RequestParam(required = false) EventStatus status
+            @RequestParam(required = false) EventStatus status,
+            Authentication authentication
     ) {
+        String email = authentication.getName();
         return ResponseEntity.ok(
-                eventQueryService.getAllEvents(type, status)
+                eventQueryService.getAllEvents(type, status,email)
         );
     }
 }

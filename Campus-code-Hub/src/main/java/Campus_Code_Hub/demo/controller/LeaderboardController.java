@@ -1,6 +1,7 @@
 package Campus_Code_Hub.demo.controller;
 
 import Campus_Code_Hub.demo.dto.LeaderboardResponse;
+import Campus_Code_Hub.demo.dto.LeaderboardStudentDTO;
 import Campus_Code_Hub.demo.service.LeaderboardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +26,15 @@ public class LeaderboardController {
         );
     }
 
+    @GetMapping("/api/admin/dashboard/top-coding")
+    public List<LeaderboardStudentDTO> getTopCodingStudents() {
+        return leaderboardService.getTopCodingStudents();
+    }
+
+    @GetMapping("/api/admin/dashboard/top-aptitude")
+    public List<LeaderboardStudentDTO> getTopAptitudeStudents() {
+        return leaderboardService.getTopAptitudeStudents();
+    }
     // 🧠 Aptitude Leaderboard
     @GetMapping("/aptitude")
     public ResponseEntity<List<LeaderboardResponse>> aptitudeLeaderboard() {

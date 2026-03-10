@@ -18,6 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class EventService {
 
+
     private final EventRepository eventRepository;
     private final EventRegistrationRepository eventRegistrationRepository;
 
@@ -115,11 +116,11 @@ public class EventService {
                 .orElseThrow(() -> new RuntimeException("Event not found"));
 
         // ❌ Do not allow deleting completed events
-        if (event.getStatus() == EventStatus.COMPLETED) {
-            throw new IllegalStateException(
-                    "Completed events cannot be deleted"
-            );
-        }
+//        if (event.getStatus() == EventStatus.COMPLETED) {
+//            throw new IllegalStateException(
+//                    "Completed events cannot be deleted"
+//            );
+//        }
 
         // ✅ Delete registrations first
         eventRegistrationRepository.deleteByEvent(event);
@@ -154,33 +155,35 @@ public class EventService {
     @Transactional
     public void assignPoints(Long eventId, AssignPointsRequest request) {
 
-        log.info("ASSIGN POINTS STARTED");
 
-        Event event = eventRepository.findById(eventId)
+        Event event=eventRepository.findById(eventId)
                 .orElseThrow(() -> new RuntimeException("Event not found"));
-
-        log.info("Event type = {}", event.getType());
 
         Student student = studentRepository.findById(request.getStudentId())
                 .orElseThrow(() -> new RuntimeException("Student not found"));
 
-        log.info("Before: coding={}, aptitude={}",
-                student.getCodingPoints(),
-                student.getAptitudePoints());
+        EventRegistration registration = eventRegistrationRepository
+                .findByEventIdAndStudentId(eventId, request.getStudentId())
+                .orElseThrow(() -> new RuntimeException("Student is not registered"));
 
+        // 1. Get the OLD points from the registration record
+        int oldPoints = registration.getPoints();
+        int newPoints = request.getPoints();
+        int difference = newPoints - oldPoints; // This calculates the change
+
+        // 2. Update the Student's total points based on the DIFFERENCE
         if (event.getType() == EventType.CODING) {
-            student.setCodingPoints(student.getCodingPoints() + request.getPoints());
+            student.setCodingPoints(student.getCodingPoints() + difference);
         } else {
-            student.setAptitudePoints(student.getAptitudePoints() + request.getPoints());
+            student.setAptitudePoints(student.getAptitudePoints() + difference);
         }
 
+        // 3. NOW update the registration record to the new value
+        registration.setPoints(newPoints);
+        eventRegistrationRepository.save(registration);
+
         studentRepository.save(student);
-
-        log.info("After: coding={}, aptitude={}",
-                student.getCodingPoints(),
-                student.getAptitudePoints());
     }
-
 
 }
 

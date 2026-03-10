@@ -17,6 +17,7 @@ public class EventResponse {
     private LocalDate eventDate;
     private String eventWeek;
 
+    private boolean registered;
     private LocalDate registrationOpenDate;
     private LocalDate registrationCloseDate;
 }

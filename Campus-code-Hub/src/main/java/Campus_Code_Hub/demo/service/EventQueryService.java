@@ -4,6 +4,7 @@ import Campus_Code_Hub.demo.dto.EventResponse;
 import Campus_Code_Hub.demo.model.Event;
 import Campus_Code_Hub.demo.model.EventStatus;
 import Campus_Code_Hub.demo.model.EventType;
+import Campus_Code_Hub.demo.repository.EventRegistrationRepository;
 import Campus_Code_Hub.demo.repository.EventRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,11 +15,13 @@ import java.util.List;
 @RequiredArgsConstructor
 public class EventQueryService {
 
+    private final EventRegistrationRepository registrationRepository;
     private final EventRepository eventRepository;
 
     public List<EventResponse> getAllEvents(
             EventType type,
-            EventStatus status
+            EventStatus status,
+            String studentEmail
     ) {
         List<Event> events;
 
@@ -32,10 +35,12 @@ public class EventQueryService {
             events = eventRepository.findAll();
         }
 
-        return events.stream().map(this::toResponse).toList();
+        return events.stream()
+                .map(event -> toResponse(event, studentEmail))
+                .toList();
     }
 
-    private EventResponse toResponse(Event event) {
+    private EventResponse toResponse(Event event,String studentEmail) {
         EventResponse dto = new EventResponse();
         dto.setId(event.getId());
         dto.setName(event.getName());
@@ -45,6 +50,13 @@ public class EventQueryService {
         dto.setEventWeek(event.getEventWeek());
         dto.setRegistrationOpenDate(event.getRegistrationOpenDate());
         dto.setRegistrationCloseDate(event.getRegistrationCloseDate());
+        boolean registered =
+                registrationRepository.existsByEventIdAndStudentEmail(
+                        event.getId(),
+                        studentEmail
+                );
+
+        dto.setRegistered(registered);
         return dto;
     }
 }

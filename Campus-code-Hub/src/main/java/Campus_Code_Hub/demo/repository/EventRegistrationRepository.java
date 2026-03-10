@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 
+
 import java.util.List;
 import java.util.Optional;
 
@@ -17,7 +18,7 @@ public interface EventRegistrationRepository
         extends JpaRepository<EventRegistration, Long> {
 
     boolean existsByEventAndStudent(Event event, Student student);
-
+    boolean existsByEventIdAndStudentEmail(Long eventId, String email);
     List<EventRegistration> findByEvent(Event event);
 
     void deleteByEvent(Event event);
@@ -50,6 +51,8 @@ public interface EventRegistrationRepository
 
 
     Optional<EventRegistration> findByEventAndStudent(Event event, Student student);
+
+    Optional<EventRegistration> findByEventIdAndStudentId(Long eventId, Long studentId);
 }
 
 

@@ -16,4 +16,8 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
      boolean existsByEmail(String email);
 
     List<Student> findByRole(Role role);
+
+    List<Student> findTop5ByOrderByCodingPointsDesc();
+
+    List<Student> findTop5ByOrderByAptitudePointsDesc();
 }

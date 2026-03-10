@@ -44,10 +44,10 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("http://localhost:8082"));
-        //config.setAllowedOrigins(List.of("http://localhost:8082"));
+        // 1. CHANGE THIS to your Frontend URL (e.g., http://localhost:5173)
+        config.setAllowedOrigins(List.of("http://localhost:5173", "http://localhost:3000","http://localhost:8080"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        config.setAllowedHeaders(List.of("*"));
+        config.setAllowedHeaders(List.of("Authorization", "Content-Type", "Cache-Control"));
         config.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
@@ -90,7 +90,7 @@ public class SecurityConfig {
 
 
                         .requestMatchers("/api/students/**").permitAll()
-                        .requestMatchers("/api/sheets/**").permitAll()
+                        .requestMatchers("/api/sheets/**").authenticated()
                         .requestMatchers("/api/events/**").permitAll()
                         .requestMatchers("/api/career-tracks/**").permitAll()
                         .requestMatchers(
