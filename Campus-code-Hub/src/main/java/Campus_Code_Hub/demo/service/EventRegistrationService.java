@@ -49,6 +49,20 @@ public class EventRegistrationService {
         registrationRepository.save(registration);
     }
 
+    public void unregister(Long eventId, String email) {
+
+        Student user = studentRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> new RuntimeException("Event not found"));
+
+        EventRegistration registration = registrationRepository
+                .findByStudentAndEvent(user, event)
+                .orElseThrow(() -> new RuntimeException("Registration not found"));
+
+        registrationRepository.delete(registration);
+    }
 
 
 

@@ -2,6 +2,7 @@ package Campus_Code_Hub.demo.config;
 
 import Campus_Code_Hub.demo.Security.JwtAuthenticationFilter;
 import Campus_Code_Hub.demo.Security.JwtUtil;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,6 +20,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import java.util.Collections;
 import java.util.List;
 
 import static org.springframework.security.authorization.AuthorityReactiveAuthorizationManager.hasAuthority;
@@ -31,6 +33,9 @@ import static org.springframework.security.authorization.AuthorityReactiveAuthor
 @EnableMethodSecurity
 public class SecurityConfig {
 
+    @Value("${frontend.url}")
+    private String frontendUrl;
+
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final UserDetailsService userDetailsService;
     private final JwtUtil jwtUtil;
@@ -41,11 +46,15 @@ public class SecurityConfig {
         this.jwtUtil = jwtUtil;
     }
 
+
+
+
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        // 1. CHANGE THIS to your Frontend URL (e.g., http://localhost:5173)
-        config.setAllowedOrigins(List.of("http://localhost:5173", "http://localhost:3000","http://localhost:8080"));
+
+        config.setAllowedOriginPatterns(List.of("*"));
+
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("Authorization", "Content-Type", "Cache-Control"));
         config.setAllowCredentials(true);
@@ -83,11 +92,12 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/api/admin/**").hasAuthority("ADMIN")
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/api/progress/**").permitAll()
                         .requestMatchers("/api/**").permitAll()
-
+                        .requestMatchers("/api/admin/dashboard/stats").permitAll()
 
                         .requestMatchers("/api/students/**").permitAll()
                         .requestMatchers("/api/sheets/**").authenticated()

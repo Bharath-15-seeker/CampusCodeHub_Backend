@@ -53,6 +53,9 @@ public interface EventRegistrationRepository
     Optional<EventRegistration> findByEventAndStudent(Event event, Student student);
 
     Optional<EventRegistration> findByEventIdAndStudentId(Long eventId, Long studentId);
+
+    Optional<EventRegistration> findByStudentAndEvent(Student user, Event event);
+
 }
 
 
